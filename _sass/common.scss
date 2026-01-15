@@ -1,0 +1,145 @@
+body {
+  background: $background;
+  color: $text;
+  font-family: $bodyFamily;
+  font-size:14pt;
+  margin:0;
+}
+
+main{
+  box-sizing:border-box;
+  width:100%;
+  max-width: 65ch;
+  margin: 0 auto;
+  font-variant-ligatures: none;
+  padding-bottom: 5em;
+}
+
+
+h1, h2, h3, h4, h5, h6{
+  font-family: $headersFamily
+}
+
+h1{
+  border-bottom:1px solid $secondary;
+}
+
+h2, h3, h4{
+  border-left: 1em solid $primary;
+  padding-left: 0.5em;
+}
+
+code{
+  font-family: $monoFamily;
+}
+
+
+nav{
+  position: sticky;
+  top:0;
+  background: $secondary;
+  padding:0.5em;
+  z-index:10;
+
+  a{
+    color:$background;
+    font-weight:700;
+  }
+}
+
+
+a{
+  color: $secondary;
+}
+
+em{
+  font-style:normal;
+  font-weight:700;
+}
+
+strong{
+  font-style:italic;
+  font-weight:400;
+}
+
+img, iframe{
+  max-width:calc(65ch - 3em);
+  margin:0 auto;
+  text-align:center;
+  align:center;
+}
+
+blockquote{
+  margin:0;
+  margin-left: 1em;
+  padding-left:1em;
+  border-left: 2px solid $accent;
+}
+
+table{
+  border-collapse:collapse;
+
+  th, td{
+    border-bottom: 1px solid $text;
+    padding:0 0.5em;
+  }
+
+  tr:nth-child(even){
+    background:$accent;
+  }
+}
+
+
+p > code {
+  border: 1px solid $accent;
+}
+
+pre{
+  overflow-x: auto;
+  &.highlight, figure > pre{
+    padding:1em;
+    border: 1px solid $primary;
+    margin: 1em;
+  }
+}
+
+.smallImgLeft{
+  max-width: 100pt;
+  float: left;
+  margin: 1em;
+}
+
+
+.info,
+.tip,
+.example,
+.warning,
+.danger {
+  border:none;
+  margin:2em;
+  padding:0;
+  border-radius: 0.5em 0.5em 0 0;
+  /*background-color:#f000f0;*/
+  ::before{
+    content:"Wololo";
+    display: block;
+    padding:0.2em 1em;
+    margin:0 0 1em 0;
+    background-color: rgba(128, 128, 128, 0.5);
+    mix-blend-mode: divide;
+    border-radius: 0.5em 0.5em 0 0;
+    border-bottom:none;
+  }
+}
+
+@media (max-width:1324px){
+  body{
+    font-size:12pt;
+  }
+  main{
+    padding:1em;
+  }
+  img, iframe{
+    max-width:90%;
+  }
+}

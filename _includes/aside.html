@@ -1,0 +1,21 @@
+<aside id="course_menu">
+    {% assign course_name = {{site.title}} %}
+    {% assign sections = site.classes
+                | sort: "section.order" 
+                | group_by: "section.name"
+    %}
+    <b class="course_name">{{course_name}}</b>
+
+    {% for section in sections %}
+    <b class="section_name">{{section.name}}</b>
+    {% assign classes = section.items 
+                | sort: "class.order"
+    %}
+    {% for class in classes %}
+    <a href="{{class.url}}" class="class_link">{{class.class.title}}</a>
+    {% endfor %}
+    {% endfor %}
+
+
+  
+</aside>

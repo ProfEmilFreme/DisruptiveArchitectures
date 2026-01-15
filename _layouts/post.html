@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>{{ page.title }} - {{ site.title }}</title>
+        <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}" id="maincss">
+    </head>
+    <body>
+        {% include nav.html %}
+        <main>
+            <h1> {{ page.title }} </h1><br><small>{{page.date | date:"%d - %Y"}}</small>
+            {{ content }}
+        </main>
+
+        <script type="text/javascript" src="{{"/assets/scripts.js" | relative_url}}"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

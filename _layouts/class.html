@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>{{ page.class.title }} - {{ site.title }}</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}" id="maincss">
+    </head>
+    <body>
+        {% include nav.html %}
+        {% include aside.html %}
+        {% include toc.html %}
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                class
+                <span class="nc ">{{ page.class.title }}</span>
+                : public
+                {% if page.collection == "courses" %}
+                {% assign course_name = site.cnames[page.course] %}
+                {% elsif page.collection == "fiap" %}
+                {% assign course_name = site.fiap_classes[page.course] %}
+                {% endif %}
+                <span class="nc ">{{ course_name }}</span>
+                {% if page.section.name != "" %}
+                , public
+                <span class="nc ">{{ page.section.name}}</span> 
+                {% endif %}
+            </div> 
+            <center><h1> {{ page.class.title }}</h1></center>
+            {{ content | inject_anchors }}
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                class
+                <span class="nc ">{{ page.class.title }}</span>
+                : public
+                <span class="nc ">{{ course_name }}</span>
+                {% if page.section.name != "" %}
+                , public
+                <span class="nc ">{{ page.section.name}}</span> 
+                {% endif %}
+            </div> 
+        </main>
+        <script type="text/javascript" src="{{"/assets/scripts.js" | relative_url}}"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>
