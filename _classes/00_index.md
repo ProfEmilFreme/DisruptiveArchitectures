@@ -11,27 +11,29 @@ class:
 
 Seja bem-vindo(a) à disciplina de *Disruptive Architectures: IA e IoT*!
 
-Aqui, você encontrará todo o material trabalhado em sala, orientações, desafios
+Sou o Professor Emil Freme e estarei com vocês ao longo desse ano. 
+
+Aqui, você encontrará todo o material trabalhado em sala: orientações, desafios
 práticos, laboratórios e referências para expandir seus horizontes.
 
-- *Curso:* Tecnologia de Desenvolvimento de Sistemas
-- *Disciplina:* Disruptive Architectures: IA e IoT
-- *Turmas 2025:* 2TDSPW
-- *Professor:* Emil Freme
+> - *Curso:* Tecnologia de Desenvolvimento de Sistemas
+> - *Disciplina:* Disruptive Architectures: IA e IoT
+> - *Turmas 2026:* 2TDSPW
+> - *Professor:* Emil Freme
 
 
 ## Objetivos do Curso
 
 Ao final desta jornada, você será capaz de:
 
-- Compreender, na prática, os fundamentos de Análise de Dados, Machine Learning
-  (ML) e Deep Learning (DL)
-- Aplicar técnicas e conceitos de DL em pequenos projetos
-- Desenvolver soluções de IA relevantes para desafios do cotidiano
 - Entender o funcionamento e potencial dos sistemas baseados em IoT (Internet
   das Coisas)
 - Reconhecer as principais tecnologias habilitadoras da IoT
 - Criar e programar experimentos e projetos de IoT
+- Compreender, na prática, os fundamentos de Análise de Dados, Machine Learning
+  (ML) e Deep Learning (DL)
+- Aplicar técnicas e conceitos de DL em pequenos projetos
+- Desenvolver soluções de IA relevantes para desafios do cotidiano
 
 
 ## O que você precisa para acompanhar?
@@ -44,24 +46,13 @@ Ao final desta jornada, você será capaz de:
 
 ## Dinâmica das Aulas
 
-Nossa proposta é aprender fazendo: cada encontro traz um desafio (exercícios,
-investigações, projetos) unindo teoria e prática. Os laboratórios são curtos e
-focados, sempre com objetivos claros para você avançar etapa por etapa.
+Acredito no mão na massa, teremos tempos de exposição e tempo de projetos, ao
+início de cada aula teremos um quiz para recapitular nossos conhecimentos.
 
 ## Softwares Necessários
 
 A maior parte do nosso trabalho será com scripts em Python e ferramentas
 amplamente utilizadas no mercado, que você pode rodar localmente ou na nuvem:
-
-### AI
-
-- **Instalação local recomendada:**
-    - Python 3.x
-    - Jupyter Notebook
-    - Anaconda
-- **Opções na nuvem:**
-    - Google Colab
-    - Kaggle
 
 ### IoT
 
@@ -72,9 +63,15 @@ amplamente utilizadas no mercado, que você pode rodar localmente ou na nuvem:
     - TinkerCad
     - Wowki
 
+### AI
 
-## Ideias de Projetos
+- **Instalação local recomendada:**
+    - Python 3.x
+    - Jupyter Notebook
 
-As possibilidades de IA e IoT são inúmeras. Pense em um problema do seu dia a
-dia que poderiam ser resolvido com Machine Learning. 
+- **Opções na nuvem:**
+    - Google Colab
+    - Kaggle
+
+
 
