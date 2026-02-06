@@ -14,31 +14,33 @@
         <main>
             <div style="font-size:1.1em;font-weight:700;margin:1em"
                 class="highlight">
-                class
-                <span class="nc ">{{ page.class.title }}</span>
-                : public
+                public class 
                 {% if page.collection == "courses" %}
                 {% assign course_name = site.cnames[page.course] %}
-                {% elsif page.collection == "fiap" %}
-                {% assign course_name = site.fiap_classes[page.course] %}
                 {% endif %}
                 <span class="nc ">{{ course_name }}</span>
-                {% if page.section.name != "" %}
-                , public
+                :
                 <span class="nc ">{{ page.section.name}}</span> 
+                {% if page.section.name != "" %}
+                , 
+                <span class="nc ">{{ page.class.title }}</span>
                 {% endif %}
             </div> 
             <center><h1> {{ page.class.title }}</h1></center>
             {{ content | inject_anchors }}
+            <hr/>
             <div style="font-size:1.1em;font-weight:700;margin:1em"
                 class="highlight">
-                class
-                <span class="nc ">{{ page.class.title }}</span>
-                : public
+                public class 
+                {% if page.collection == "courses" %}
+                {% assign course_name = site.cnames[page.course] %}
+                {% endif %}
                 <span class="nc ">{{ course_name }}</span>
-                {% if page.section.name != "" %}
-                , public
+                :
                 <span class="nc ">{{ page.section.name}}</span> 
+                {% if page.section.name != "" %}
+                , 
+                <span class="nc ">{{ page.class.title }}</span>
                 {% endif %}
             </div> 
         </main>
