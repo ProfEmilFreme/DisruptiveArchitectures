@@ -6,11 +6,12 @@ section:
     order: 0
 class:
     title: "Notas"
-    order: 0
+    order: 1
 ---
 
 No início de cada aula<sup>*</sup> haverá um quiz no MS Teams, as notas dos Checkpoints
 serão definidas pela sua média de quiz até a data do CP. 
+
 Entretanto, cada quiz zerado acrescenta um peso extra na divisão da média, penalizando o cálculo final.
 
 <blockquote>
