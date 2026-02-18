@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Definições de IoT - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#histórico">Histórico</a></li>
+<li class="toc-entry toc-h1"><a href="#o-que-é-iot">O que é IoT?</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#sensores-sentem-o-ambiente">Sensores sentem o ambiente</a></li>
+<li class="toc-entry toc-h2"><a href="#atuadores--inteferem-no-ambiente">Atuadores  Inteferem no ambiente</a></li>
+<li class="toc-entry toc-h2"><a href="#controladores-tomam-decisões">Controladores tomam decisões</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#iot-em-setores-específicos">IoT em Setores Específicos</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#iot-médica-iomt---internet-of-medical-things">IoT Médica (IoMT - Internet of Medical Things)</a></li>
+<li class="toc-entry toc-h2"><a href="#iot-agrícola-agri-iot-ou-agricultura-inteligente">IoT Agrícola (Agri-IoT ou Agricultura Inteligente)</a></li>
+<li class="toc-entry toc-h2"><a href="#iot-logistico">IoT Logistico</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#para-saber-mais">Para saber mais:</a></li>
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">IoT</span> 
+                
+                , 
+                <span class="nc ">Definições de IoT</span>
+                
+            </div> 
+            <center><h1> Definições de IoT</h1></center>
+            <h1 id="histórico">
+<a class="anchor" href="#hist%C3%B3rico" aria-hidden="true"><span class="octicon octicon-link"></span></a>Histórico</h1>
+
+<p>Desde os tempos mais remotos da computação, digo, a partir do momento em que
+conseguimos ter redes de computadores, temos procurado formas de acessar
+diversos dispositivos de forma remota. Um dos primeiros exemplares disso é a
+“Máquina de Coca-Cola da Universidade de Carnegie Mellon”, feita em 1982, que, a
+partir de um comando na rede Unix da Instituição, respondia com um relatório
+simples as bebidas que ainda estavam disponíveis. Outro exemplo clássico é a
+primeira webcam feita em 1991, que foi criada para ficar de olho em uma jarra de
+café. Os dois casos, foram movidos pela preguiça dos pesquisadores em se
+movimentar e descobrir que não encontrariam o que queriam.</p>
+
+<p>Apesar de já existirem alguns dispositivos conectados à rede, o termo <strong>Internet
+of Things</strong>, é cunhado só em 1999, e passa por uma grande evolução de conceitos
+desde então. O seu progresso foi impulsionado principalmente pelos avanços na
+miniaturização de sensores, controladores e tecnologias de comunicação sem fio,
+lembrando também do IPV6, que permitiu um maior número de dispositívos
+conectados a mesma rede.</p>
+
+<p>Hoje, entendemos IoT como a integração entre dispositivos físicos e sistemas
+digitais possibilitando a coleta, processamento e compartilhamento contínuo de
+dados em tempo real.</p>
+
+<h1 id="o-que-é-iot">
+<a class="anchor" href="#o-que-%C3%A9-iot" aria-hidden="true"><span class="octicon octicon-link"></span></a>O que é IoT?</h1>
+
+<p>Minha definição:</p>
+
+\[\text{"Coisas"}
++
+\begin{pmatrix}
+Sensores\\
+Controladores\\
+Atuadores
+\end{pmatrix}
++
+\text{Internet}\]
+
+<p>IoT pode ser entendida como a “coisas”: equipamentos diversos e
+objetos do dia a dia, que tenham integrados em si sensores, controladores e
+alguma forma de conexão com a internet.</p>
+
+<hr>
+
+<h2 id="sensores-sentem-o-ambiente">
+<a class="anchor" href="#sensores-sentem-o-ambiente" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sensores <br><small>sentem o ambiente</small>
+</h2>
+
+<p>Os sensores são os seus “sentidos”: tato, olfato, visão, etc.</p>
+
+<p>Eles são os componentes fundamentais que permitem a um dispositivo converter
+estímulos como luz, som, movimento e temperatura em sinais elétricos que
+poderemos interpretar.</p>
+
+<p>A capacidade de coleta de dados do ambiente é o que torna a IoT tão poderosa,
+permitindo desde a automação residencial até o monitoramento industrial
+complexo.</p>
+
+<p><img src="figuras/sensores.png" alt="sensores"></p>
+
+<h2 id="atuadores--inteferem-no-ambiente">
+<a class="anchor" href="#atuadores--inteferem-no-ambiente" aria-hidden="true"><span class="octicon octicon-link"></span></a>Atuadores <br><small> Inteferem no ambiente</small>
+</h2>
+
+<p>Enquanto os sensores permitem que os sistemas de IoT “sintam” o mundo, os
+atuadores são os componentes que lhes permitem “agir”. Quando disparamos um
+comando para esses equipamentos, isso será convertido em uma ação física no
+mundo real. Seja movendo, aquecendo, iluminando ou emitindo som.</p>
+
+<p><img src="figuras/atuadores.png" alt="atuadores"></p>
+
+<h2 id="controladores-tomam-decisões">
+<a class="anchor" href="#controladores-tomam-decis%C3%B5es" aria-hidden="true"><span class="octicon octicon-link"></span></a>Controladores <br><small>tomam decisões</small>
+</h2>
+
+<p>Por fim no coração de todo dispositivo de Internet das Coisas (IoT) existe um
+controlador, o componente responsável pelo processamento, controle e
+comunicação. A seleção de uma categoria de controlador é uma decisão de
+projeto, regida pelas necessidades da aplicação.</p>
+
+<p>Na figura que mostra os controladores, podemos ver que existem grandes
+diferenças entre os controladores para  <strong>IoT de Consumo (CIoT)</strong> [Muito
+utilizados em projetos DIY e hobby] e aqueles utilizados em <strong>IoT Industrial
+(IIoT)</strong>.</p>
+
+<p>Sentiremsos o impacto dessas diferenças em seu custo, poder de processamento e
+nível de especialização.</p>
+
+<p><img src="figuras/tiposdecontroladores.png" alt="tipos de controladores"></p>
+
+<h1 id="iot-em-setores-específicos">
+<a class="anchor" href="#iot-em-setores-espec%C3%ADficos" aria-hidden="true"><span class="octicon octicon-link"></span></a>IoT em Setores Específicos</h1>
+
+<p>A escolha de um controlador depende diretamente dos desafios e requisitos do
+setor de aplicação. Os campos da saúde e da agricultura, por exemplo, utilizam
+todo o espectro de controladores para atender às suas necessidades únicas.</p>
+
+<h2 id="iot-médica-iomt---internet-of-medical-things">
+<a class="anchor" href="#iot-m%C3%A9dica-iomt---internet-of-medical-things" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>IoT Médica (IoMT - Internet of Medical Things)</strong>
+</h2>
+
+<p>A IoMT exige altíssima confiabilidade, segurança de dados, certificação rigorosa
+e, frequentemente, miniaturização e baixo consumo de energia.</p>
+
+<ul>
+  <li>Microcontroladores: Wearables, baixo consumo e portabilidade.</li>
+  <li>SBCs: Monitores de leito, telas e integração de dados.</li>
+  <li>FPGAs: Imagem de alta velocidade (Ultrassom/RM).</li>
+  <li>Controladores Médicos: Suporte à vida e operação à prova de falhas.</li>
+  <li>Protocolos: BLE (sensores), Wi-Fi (monitores), Ethernet/DICOM (imagens e alta criticidade).</li>
+</ul>
+
+<h2 id="iot-agrícola-agri-iot-ou-agricultura-inteligente">
+<a class="anchor" href="#iot-agr%C3%ADcola-agri-iot-ou-agricultura-inteligente" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>IoT Agrícola (Agri-IoT ou Agricultura Inteligente)</strong>
+</h2>
+
+<p>A Agri-IoT enfrenta desafios como ambientes externos hostis, necessidade de
+comunicação a longa distância e a busca por soluções de baixo custo para
+implantação em larga escala.</p>
+
+<ul>
+  <li>Microcontroladores: Sensores de campo, baixo consumo (bateria) e monitoramento de solo/clima.
+    <ul>
+      <li>Comunicação por protocolos de longo alcance como LoRa</li>
+    </ul>
+  </li>
+  <li>SBCs: Gateways de dados e processamento de imagens em drones agrícolas.</li>
+  <li>PLCs: Automação de maquinário pesado (tratores/colheitadeiras) e controle de silos/irrigação.</li>
+  <li>Protocolos: LoRaWAN/Sigfox (campo aberto), 4G/5G/Satélite (nuvem), CAN bus/ISOBUS (máquinas).</li>
+</ul>
+
+<h2 id="iot-logistico">
+<a class="anchor" href="#iot-logistico" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>IoT Logistico</strong>
+</h2>
+
+<ul>
+  <li>Tags/Etiquetas (Passivas): Etiquetas RFID e NFC para identificação de pacotes e paletes (sem bateria, alimentadas pelo leitor).</li>
+  <li>Microcontroladores (Ativos): Dispositivos de monitoramento de carga (Dataloggers) que medem temperatura e impacto em tempo real, usando BLE ou LoRa.</li>
+  <li>SBCs: Cérebro de robôs autônomos (AMRs) e gateways que processam o inventário lido por antenas RFID.</li>
+  <li>PLCs: Automação pesada, como sorters (classificadores), esteiras e elevadores de carga.</li>
+  <li>Protocolos: RFID/NFC (curtíssimo alcance), Zigbee/BLE (galpão) e 5G (rastreio externo).</li>
+</ul>
+
+<h1 id="para-saber-mais">
+<a class="anchor" href="#para-saber-mais" aria-hidden="true"><span class="octicon octicon-link"></span></a>Para saber mais:</h1>
+
+<ol>
+  <li>
+    <p>Gubbi, J., Buyya, R., Marusic, S., &amp; Palaniswami, M. (2013). Internet of
+Things (IoT): A Vision, Architectural Elements, and Future Directions. Future
+Generation Computer Systems, 29(7), 1645–1660.</p>
+  </li>
+  <li>
+    <p>Ashton, K. (2009). That ‘Internet of Things’ Thing. RFID Journal.</p>
+  </li>
+  <li>
+    <p>IEEE Internet of Things. (2024). IEEE Internet of Things Initiative Overview.
+IEEE.</p>
+  </li>
+  <li>
+    <p>Evans, D. (2011). The Internet of Things — How the Next Evolution of the
+Internet Is Changing Everything. Cisco Internet Business Solutions Group
+(IBSG).</p>
+  </li>
+  <li>
+    <p>Madakam, S., Ramaswamy, R., &amp; Tripathi, S. (2015). Internet of Things (IoT):
+A Literature Review. Journal of Computer and Communications, 3(5), 164–173.</p>
+  </li>
+  <li>
+    <p>CMU SCS COKE MACHINE HOME PAGE. Carnegie Mellon University, School of
+Computer Science. https://www.cs.cmu.edu/~coke/.</p>
+  </li>
+</ol>
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">IoT</span> 
+                
+                , 
+                <span class="nc ">Definições de IoT</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>
