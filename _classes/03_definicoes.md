@@ -6,7 +6,7 @@ section:
     order: 0
 class:
     title: "Definições de IoT"
-    order: 1
+    order: 0
 ---
 
 # Histórico
