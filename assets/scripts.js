@@ -39,3 +39,11 @@ function set_theme(theme_name){
     console.log(path);
     styletag.href = path;
 }
+
+document.querySelectorAll("img").forEach(img => {
+    img.style.cursor="pointer";
+    img.addEventListener("click", () => {
+        window.open(img.src, "_blank");
+    });
+});
+
