@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Input: Keypad - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Input: Keypad</span>
+                
+            </div> 
+            <center><h1> Input: Keypad</h1></center>
+            <p><img src="assets/render_keypadOnly.png" alt="" height="150px"></p>
+
+<p>O Keypad é uma das formas de se adicionar entrada de dados mais complexas para
+nosso projeto, pois ele é simples, e podemos utilizar a biblioteca <code class="language-plaintext highlighter-rouge">Keypad.h</code>
+para trabalhar com ele.</p>
+
+<p>Na sequência temos o esquema e o desenho de como fazer a conexão dele.</p>
+
+<p><img src="assets/schem_keypad.png" alt=""></p>
+
+<p><img src="assets/render_keypad.png" alt=""></p>
+
+<p>O teclado 4x4 funciona como uma matriz de contatos abertos organizada em 4
+linhas e 4 colunas. Quando uma tecla é pressionada, ela conecta fisicamente uma
+linha a uma coluna, fechando o circuito naquele ponto. O Arduino identifica a
+tecla através de uma varredura: ele envia um sinal por uma linha de cada vez e
+verifica em qual coluna esse sinal “apareceu”; o cruzamento elétrico dessas duas
+coordenadas define a tecla exata.</p>
+
+<p>Então precisamos definir quem são nossa linhas em quem são nossas colunas em
+nosso código para utilizar com a biblioteca <code class="language-plaintext highlighter-rouge">Keypad.h</code></p>
+
+<p>Veja como fica o código para ler as teclas pressionadas dele.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*******************************************************************************
+ * @file            LerKeypad.ino
+ * @brief           Demonstração básica de uso da biblioteca keypad.h do Arduino
+ * @author          Prof. Emil Freme
+ * @adapted_from    https://playground.arduino.cc/Main/KeypadTutorial/
+ * @license         Creative Commons Atribuição 4.0 (CC BY)
+ *******************************************************************************/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Keypad.h&gt;</span><span class="cp">
+</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">LINHAS</span>  <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// Quantidade de linhas</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">COLUNAS</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// Quantidade de colunas</span>
+
+<span class="c1">// Mapeamento dos caracteres nas teclas</span>
+<span class="kt">char</span> <span class="n">teclas</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="p">{</span>
+  <span class="p">{</span><span class="sc">'1'</span><span class="p">,</span><span class="sc">'2'</span><span class="p">,</span><span class="sc">'3'</span><span class="p">,</span><span class="sc">'A'</span><span class="p">},</span>
+  <span class="p">{</span><span class="sc">'4'</span><span class="p">,</span><span class="sc">'5'</span><span class="p">,</span><span class="sc">'6'</span><span class="p">,</span><span class="sc">'B'</span><span class="p">},</span>
+  <span class="p">{</span><span class="sc">'7'</span><span class="p">,</span><span class="sc">'8'</span><span class="p">,</span><span class="sc">'9'</span><span class="p">,</span><span class="sc">'C'</span><span class="p">},</span>
+  <span class="p">{</span><span class="sc">'*'</span><span class="p">,</span><span class="sc">'0'</span><span class="p">,</span><span class="sc">'#'</span><span class="p">,</span><span class="sc">'D'</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// Definição dos pinos conectados ao Arduino</span>
+<span class="n">byte</span> <span class="n">pinLinhas</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">};</span>  <span class="c1">// Pinos das linhas</span>
+<span class="n">byte</span> <span class="n">pinColunas</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span> <span class="c1">// Pinos das colunas</span>
+
+<span class="c1">// Inicialização da biblioteca Keypad</span>
+<span class="n">Keypad</span> <span class="n">keypad</span> <span class="o">=</span> <span class="n">Keypad</span><span class="p">(</span><span class="n">makeKeymap</span><span class="p">(</span><span class="n">teclas</span><span class="p">),</span>
+                       <span class="n">pinLinhas</span><span class="p">,</span>
+                       <span class="n">pinColunas</span><span class="p">,</span> 
+                       <span class="n">LINHAS</span><span class="p">,</span>
+                       <span class="n">COLUNAS</span><span class="p">);</span>
+
+<span class="c1">// Função para tratar a tecla pressionada</span>
+<span class="kt">void</span> <span class="nf">keyHandler</span><span class="p">(</span><span class="kt">char</span> <span class="n">key</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">key</span><span class="p">){</span> <span class="c1">// Ignora se nenhuma tecla foi detectada</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">key</span><span class="p">);</span> <span class="c1">// Exibe a tecla no Monitor Serial</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span> <span class="c1">// Inicia comunicação serial</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">(){</span>
+  <span class="kt">char</span> <span class="n">key</span> <span class="o">=</span> <span class="n">keypad</span><span class="p">.</span><span class="n">getKey</span><span class="p">();</span> <span class="c1">// Verifica se houve entrada</span>
+  <span class="n">keyHandler</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>           <span class="c1">// Processa a entrada</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Input: Keypad</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>
