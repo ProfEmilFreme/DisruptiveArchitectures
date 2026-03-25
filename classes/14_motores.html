@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Motores - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#1-motor-dc-com-ponte-h-l293d">1. Motor DC com Ponte H (L293D)</a></li>
+<li class="toc-entry toc-h1"><a href="#2-servo-motor">2. Servo Motor</a></li>
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Motores</span>
+                
+            </div> 
+            <center><h1> Motores</h1></center>
+            <p>Enquanto os sensores trazem informações do mundo para o Arduino, os Atuadores
+(Saída) permitem que o projeto realize ações físicas. Nesta seção, veremos como
+controlar a velocidade e direção de um motor comum e a posição precisa de um
+servo motor.</p>
+
+<p><img src="assets/motores.png" alt=""></p>
+
+<h1 id="1-motor-dc-com-ponte-h-l293d">
+<a class="anchor" href="#1-motor-dc-com-ponte-h-l293d" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Motor DC com Ponte H (L293D)</h1>
+
+<p>O motor DC é ideal para tração (rodas) e ventiladores. Para controlá-lo, usamos
+o CI L293D, que permite ao Arduino gerenciar a potência externa e inverter o
+sentido de rotação.</p>
+
+<p>Conrole de Direção: Feito pelos pinos input.</p>
+
+<p>Controle de Velocidade: Feito pelo pino enable usando PWM (analogWrite).</p>
+
+<p>Ponte H (L293D) é indispensável porque o Arduino atua apenas como o “cérebro” do
+projeto, enviando sinais de baixa corrente (até 40mA) que são insuficientes para
+movimentar os “músculos” de um motor, que exige correntes muito mais altas. Além
+de fornecer essa potência extra através de uma fonte externa, a ponte H protege
+o microcontrolador contra picos de tensão reversa gerados pelo motor e permite o
+controle total de direção e velocidade via PWM, algo impossível de se fazer com
+segurança através de uma conexão direta.</p>
+
+<p><img src="assets/detalhePonteH.png" alt=""></p>
+
+<p>Para conectar o motor com a Ponte H e o Arduino fazemos da seguinte forma:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Pino Ponte H</th>
+      <th>Onde</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">VCC1/Power1</td>
+      <td>5V Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">VCC2/Power2</td>
+      <td>Fonte Externa</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Input 4</td>
+      <td>Digital Pin Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Output 4</td>
+      <td>Motor 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">GND</td>
+      <td>GND Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Output 3</td>
+      <td>Motor 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Input 3</td>
+      <td>Digitial Pin Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Enable 3/4</td>
+      <td>PWM Pin Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Input 1</td>
+      <td>Digital Pin Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Output 1</td>
+      <td>Motor 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">GND</td>
+      <td>GND Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Output 2</td>
+      <td>Motor 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Input 2</td>
+      <td>Digitial Pin Arduino</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Enable 1/2</td>
+      <td>PWM Pin Arduino</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>E lembre se de conectar o negativo da fonte externa o GND do arduino!</p>
+
+<h1 id="2-servo-motor">
+<a class="anchor" href="#2-servo-motor" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Servo Motor</h1>
+
+<p>O Servo Motor é um atuador de precisão que permite controlar o ângulo de seu
+eixo (geralmente de 0° a 180°). Diferente do motor DC, ele possui um circuito
+interno que mantém a posição desejada, sendo ideal para braços robóticos, lemes
+e travas.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*******************************************************************************
+ * @file            MotoresEServos.ino
+ * @brief           Controle de Motor DC (L293D) e Servo Motor
+ * @author          Prof. Emil Freme
+ * @adapted_from    https://lastminuteengineers.com/l293d-dc-motor-arduino-tutorial/
+ * @license         Creative Commons Atribuição 4.0 (CC BY)
+ *******************************************************************************/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Servo.h&gt;</span><span class="cp">
+</span>
+<span class="c1">// Pinos do Motor DC (Ponte H L293D)</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">in4</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>   <span class="c1">// Direção A</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">in3</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>   <span class="c1">// Direção B</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">en34</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// Velocidade (PWM)</span>
+
+<span class="c1">// Configuração do Servo</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinServo</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+<span class="n">Servo</span> <span class="n">servo</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Configura o servo e seus limites de pulso (500us a 2500us)</span>
+  <span class="n">servo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">pinServo</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">);</span>
+  
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">in4</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">in3</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">en34</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// --- MOTOR DC: Teste de Direção e Velocidade ---</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">in4</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span> 
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">in3</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>    <span class="c1">// Sentido Horário</span>
+  <span class="n">analogWrite</span><span class="p">(</span><span class="n">en34</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span>    <span class="c1">// Velocidade Máxima</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+  
+  <span class="n">analogWrite</span><span class="p">(</span><span class="n">en34</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>    <span class="c1">// Reduz para Meia Velocidade</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">in4</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">in3</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>   <span class="c1">// Inverte Sentido (Anti-horário)</span>
+  <span class="n">analogWrite</span><span class="p">(</span><span class="n">en34</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+  
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">in3</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>    <span class="c1">// Para o motor DC</span>
+  
+  <span class="c1">// --- SERVO MOTOR: Varredura de 0 a 180 graus ---</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&lt;=</span> <span class="mi">180</span><span class="p">;</span> <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">servo</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>        <span class="c1">// Move o servo para a posição 'pos'</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>               <span class="c1">// Aguarda o movimento físico</span>
+  <span class="p">}</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">pos</span> <span class="o">=</span> <span class="mi">180</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">servo</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><a href="https://www.tinkercad.com/things/hIJJLzFd2Ed-motores?sharecode=9uP0nddsxY1XI0z0qH2vY96yZMpBLIyYCGV68mTviro">Projeto no Tinkecad</a></p>
+
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Motores</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

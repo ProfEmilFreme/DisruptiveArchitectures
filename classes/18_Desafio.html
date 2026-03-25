@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Genius + MQTT + Dashboard - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#desafio-genius-iot---global-leaderboard">Desafio: Genius IoT - Global Leaderboard</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#objetivo">Objetivo</a></li>
+<li class="toc-entry toc-h3"><a href="#fase-1-interface-e-identificação-hardware--código-o-jogo-não-deve">Fase 1: Interface e Identificação (Hardware &amp; Código) O jogo não deve</a></li>
+<li class="toc-entry toc-h3"><a href="#fase-2-gameplay-dinâmico-lógica-de-programação-o-jogo-precisa-ser">Fase 2: Gameplay Dinâmico (Lógica de Programação) O jogo precisa ser</a></li>
+<li class="toc-entry toc-h3"><a href="#fase-3-conectividade-mqtt-o-dispositivo-deve-reportar-os-resultados">Fase 3: Conectividade (MQTT) O dispositivo deve reportar os resultados</a></li>
+<li class="toc-entry toc-h3"><a href="#fase-4-inteligência-e-visualização-node-red-o-node-red-atuará-como-o">Fase 4: Inteligência e Visualização (Node-RED) O Node-RED atuará como o</a></li>
+<li class="toc-entry toc-h3"><a href="#requisitos-técnicos-de-entrega">Requisitos Técnicos de Entrega:</a></li>
+</ul>
+</li>
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Desafio</span> 
+                
+                , 
+                <span class="nc ">Genius + MQTT + Dashboard</span>
+                
+            </div> 
+            <center><h1> Genius + MQTT + Dashboard</h1></center>
+            <h1 id="desafio-genius-iot---global-leaderboard">
+<a class="anchor" href="#desafio-genius-iot---global-leaderboard" aria-hidden="true"><span class="octicon octicon-link"></span></a>Desafio: Genius IoT - Global Leaderboard</h1>
+
+<h3 id="objetivo">
+<a class="anchor" href="#objetivo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objetivo</h3>
+<p>Transformar o jogo “Genius” que fizemos nas aulas anteriores em um dispositivo
+IoT conectado, capaz de identificar o jogador, aumentar a dificuldade
+progressivamente e registrar as pontuações em um ranking global em tempo real.</p>
+
+<h3 id="fase-1-interface-e-identificação-hardware--código-o-jogo-não-deve">
+<a class="anchor" href="#fase-1-interface-e-identifica%C3%A7%C3%A3o-hardware--c%C3%B3digo-o-jogo-n%C3%A3o-deve" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fase 1: Interface e Identificação (Hardware &amp; Código) O jogo não deve</h3>
+<p>começar imediatamente. O sistema deve aguardar a identificação do jogador.</p>
+<ul>
+  <li>
+<strong>Tag do Jogador:</strong> Implemente um estado inicial no código onde o jogador
+utiliza botões (ou um encoder) para selecionar <strong>3 caracteres</strong> (ex:
+“ABC”, “JOE”) que servirão como sua “TAG”.</li>
+  <li>
+<strong>Display LCD I2C:</strong> Utilize um display LCD 16x2 com módulo I2C para
+exibir:
+    <ul>
+      <li>Mensagem de boas-vindas.</li>
+      <li>Seleção da Tag em tempo real.</li>
+      <li>Pontuação atual durante o jogo.</li>
+      <li>Mensagem de “Game Over” com a pontuação final.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="fase-2-gameplay-dinâmico-lógica-de-programação-o-jogo-precisa-ser">
+<a class="anchor" href="#fase-2-gameplay-din%C3%A2mico-l%C3%B3gica-de-programa%C3%A7%C3%A3o-o-jogo-precisa-ser" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fase 2: Gameplay Dinâmico (Lógica de Programação) O jogo precisa ser</h3>
+<p>mais desafiador e duradouro do que a versão básica.</p>
+<ul>
+  <li>
+<strong>Limite Estendido:</strong> Altere as variáveis de controle e arrays para que o
+jogo suporte sequências de <strong>pelo menos 100 rodadas</strong> (ou até o jogador
+errar), removendo o limite fixo de 10.</li>
+  <li>
+<strong>Dificuldade Adaptativa:</strong> Implemente uma lógica de tempo dinâmico. A
+cada rodada vencida, o tempo de acendimento dos LEDs e o intervalo entre
+as cores deve diminuir (ex: reduzindo 10% a cada nível), tornando o jogo
+mais frenético conforme o jogador avança.</li>
+</ul>
+
+<h3 id="fase-3-conectividade-mqtt-o-dispositivo-deve-reportar-os-resultados">
+<a class="anchor" href="#fase-3-conectividade-mqtt-o-dispositivo-deve-reportar-os-resultados" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fase 3: Conectividade (MQTT) O dispositivo deve reportar os resultados</h3>
+<p>para a nuvem.</p>
+<ul>
+  <li>
+<strong>Publicação de Resultados:</strong> Assim que o jogador errar a sequência, o
+microcontrolador deve formatar uma mensagem (preferencialmente em JSON)
+contendo: <code class="language-plaintext highlighter-rouge">{"tag": "ABC", "score": 15}</code>.</li>
+  <li>
+<strong>Tópico:</strong> Publique esta informação em um tópico exclusivo no broker
+público (ex: <code class="language-plaintext highlighter-rouge">disruptive/genius/rank</code>).</li>
+</ul>
+
+<h3 id="fase-4-inteligência-e-visualização-node-red-o-node-red-atuará-como-o">
+<a class="anchor" href="#fase-4-intelig%C3%AAncia-e-visualiza%C3%A7%C3%A3o-node-red-o-node-red-atuar%C3%A1-como-o" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fase 4: Inteligência e Visualização (Node-RED) O Node-RED atuará como o</h3>
+<p>“Cérebro” do ranking.</p>
+<ul>
+  <li>
+<strong>Processamento de Dados:</strong> Crie um fluxo que escuta o tópico MQTT. Ao
+receber uma nova pontuação, o Node-RED deve comparar com os resultados
+anteriores.</li>
+  <li>
+<strong>Dashboard de Líderes:</strong>
+    <ul>
+      <li>Utilize o nó <code class="language-plaintext highlighter-rouge">ui_table</code> ou <code class="language-plaintext highlighter-rouge">ui_text</code> do pacote
+  <strong>node-red-dashboard</strong>.</li>
+      <li>O dashboard deve exibir uma <strong>lista dos 10 melhores jogadores</strong>
+  (Top 10), ordenada da maior para a menor pontuação.</li>
+      <li>A lista deve ser persistente (dica: utilize variáveis de
+  <code class="language-plaintext highlighter-rouge">context</code> ou <code class="language-plaintext highlighter-rouge">global</code> no Node-RED para armazenar o ranking enquanto o
+  servidor estiver rodando).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="requisitos-técnicos-de-entrega">
+<a class="anchor" href="#requisitos-t%C3%A9cnicos-de-entrega" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requisitos Técnicos de Entrega:</h3>
+<ol>
+  <li>
+<strong>Código-fonte:</strong> Comentado, destacando as funções de redução de tempo
+e a lógica da Tag.</li>
+  <li>
+<strong>Esquema Elétrico:</strong> Diagrama atualizado incluindo o LCD I2C e os
+botões de controle.</li>
+  <li>
+<strong>Fluxo Node-RED:</strong> Exportação do JSON do fluxo ou print do dashboard
+funcionando com as 10 melhores pontuações.</li>
+</ol>
+
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Desafio</span> 
+                
+                , 
+                <span class="nc ">Genius + MQTT + Dashboard</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Node-Red - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#anatomia-de-um-fluxo">Anatomia de um “Fluxo”</a></li>
+<li class="toc-entry toc-h1"><a href="#node-red-hello-world">Node-Red Hello World</a></li>
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Backend</span> 
+                
+                , 
+                <span class="nc ">Node-Red</span>
+                
+            </div> 
+            <center><h1> Node-Red</h1></center>
+            <p>Antes de explorarmos protocolos como HTTP, MQTT e WebSocket em nossos projetos
+IoT, é importante conhecer uma ferramenta poderosa que facilita a criação e
+integração dessas soluções: o Node-RED. Trata-se de um ambiente de programação
+visual baseado em fluxos, desenvolvido para simplificar a conexão entre
+dispositivos, APIs e serviços online.</p>
+
+<p>No Node-RED, você monta seus sistemas arrastando e conectando blocos chamados
+“nós”, que representam ações ou dispositivos, eliminando boa parte da
+complexidade de se programar linha a linha. Essa abordagem torna o
+desenvolvimento mais acessível e intuitivo, principalmente para quem trabalha
+com IoT, automação e sistemas embarcados.</p>
+
+<p>Com ele, é possível rapidamente criar servidores web, clientes MQTT, interfaces
+websocket e integrar sensores e atuadores em uma rede sem grandes dificuldades
+técnicas. Podem ser feitas rotinas para receber dados, processá-los,
+armazená-los e interagir com diferentes protocolos e dispositivos — tudo em um
+ambiente unificado e com visualização clara do fluxo de dados.</p>
+
+<p>Nosso objetivo ao utilizar o Node-RED é conectar os conceitos de eletrônica,
+sistemas embarcados e comunicação de rede que vimos até agora, com uma
+ferramenta prática que acelera a prototipagem e o desenvolvimento de soluções
+IoT e aplicações inteligentes.</p>
+
+<p>A partir daqui, conheceremos os principais nós e fluxos que permitem a criação
+de APIs web simples, clientes e servidores MQTT e WebSocket, ampliando as
+possibilidades para construir sistemas completos e funcionais</p>
+
+<h1 id="anatomia-de-um-fluxo">
+<a class="anchor" href="#anatomia-de-um-fluxo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Anatomia de um “Fluxo”</h1>
+
+<p>Para dominar a ferramenta, é preciso entender os três pilares que compõem sua
+interface:</p>
+
+<p>Nós (Nodes): São os blocos de construção básicos. Cada nó executa uma função
+específica — desde ouvir uma requisição HTTP até realizar um cálculo matemático
+complexo.</p>
+
+<p>Fluxos (Flows): Representam a lógica do sistema. Ao conectar a saída de um nó à
+entrada de outro, você define o caminho que a informação percorrerá.</p>
+
+<p>Mensagens (msg): O objeto que viaja entre os nós. Geralmente formatado como um
+objeto JSON, ele contém o msg.payload, que carrega o dado principal (como a
+leitura de um sensor).</p>
+
+<h1 id="node-red-hello-world">
+<a class="anchor" href="#node-red-hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Node-Red Hello World</h1>
+
+<p>Caso você ainda não tenha olhado para a cara do Node-red, abaixo podemos ver
+como é a interface dele assim que abrimos um novo projeto.</p>
+
+<p><img src="assets/node-red-vazio.png" alt="Node red vazio"></p>
+
+<p>À esquerda estão os nós que podemos utilizar, ao centro nossa área de trabalho e
+à direita as configurações do fluxo.</p>
+
+<p>Para começar pegue os nós <code class="language-plaintext highlighter-rouge">http in</code>, <code class="language-plaintext highlighter-rouge">template</code>, <code class="language-plaintext highlighter-rouge">http response</code> e <code class="language-plaintext highlighter-rouge">debug</code>:</p>
+
+<p><img src="assets/nossoltos.png" alt="Nós soltos"></p>
+
+<p>Agora selecionando os nós coseguimos configurar cada um, para isso dê um duplo
+clique.</p>
+
+<p>Configure o <code class="language-plaintext highlighter-rouge">http in</code> da seguinte forma:</p>
+
+<ul>
+  <li>Method: GET</li>
+  <li>URL: /ola</li>
+  <li>Name: Ola</li>
+</ul>
+
+<p>Configure o <code class="language-plaintext highlighter-rouge">template</code>:</p>
+
+<ul>
+  <li>Name: MSG_OLA</li>
+  <li>Property: msg.payload</li>
+  <li>Template:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Olá! 
+
+Seja Bem vindo !
+</code></pre></div></div>
+
+<p>Agora conecte o <code class="language-plaintext highlighter-rouge">http in</code> <code class="language-plaintext highlighter-rouge">Ola</code> na entrada do <code class="language-plaintext highlighter-rouge">debug</code> e da <code class="language-plaintext highlighter-rouge">template</code> <code class="language-plaintext highlighter-rouge">MSG_OLA</code>,
+e por fim a saida da <code class="language-plaintext highlighter-rouge">template</code>na entrada do <code class="language-plaintext highlighter-rouge">http response</code></p>
+
+<p><img src="assets/primeiroFlow.png" alt="Primeiro Flow"></p>
+
+<p>Agora podemos clicar no botão <code class="language-plaintext highlighter-rouge">Deploy</code> no canto superior direito, se tudo
+estiver certo você verá a mensagem “Successfully deployed”.</p>
+
+<p>Agora podemos tentar acessa o <code class="language-plaintext highlighter-rouge">endpoint</code> <code class="language-plaintext highlighter-rouge">/ola</code> que acabamos de configurar</p>
+
+<p><img src="assets/primeiroendpoint.png" alt="Primeiro Endpoint"></p>
+
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Backend</span> 
+                
+                , 
+                <span class="nc ">Node-Red</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

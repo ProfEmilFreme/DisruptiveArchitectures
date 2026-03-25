@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Sensores analógicos - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Sensores analógicos</span>
+                
+            </div> 
+            <center><h1> Sensores analógicos</h1></center>
+            <p>Os sensores analógicos convertem grandezas físicas (como a umidade do solo, a
+inclinação ou a força) em uma voltagem variável. O Arduino lê essa voltagem e a
+transforma em um número que conseguimos ler via entrada analógica.</p>
+
+<p>O Arduino possui um conversor de 10 bits. Isso significa que ele divide os 5V da alimentação em 1024 partes iguais.</p>
+
+<ul>
+  <li>Valor 0: O sensor está enviando 0V.</li>
+  <li>Valor 1023: O sensor está enviando 5V.</li>
+  <li>Valores intermediários: Representam a intensidade da grandeza medida (ex:
+mais força, mais luz ou mais calor).</li>
+</ul>
+
+<p>Muitos dos sensosre analogicos funcionam dessa forma, abaixo temos o exemplo de
+alguns deles:</p>
+
+<ul>
+  <li>Sensor de Gas;</li>
+  <li>Sensor de Temperatura;</li>
+  <li>Sensor de Rotação(Tilt);</li>
+  <li>Sensor de Torção (Flex);</li>
+  <li>Sensor de Força;</li>
+  <li>Sensor de Úmidade do solo;</li>
+</ul>
+
+<p><img src="assets/sensoresdiversos.png" alt=""></p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*******************************************************************************
+ * @file            SensoresAnalogicos.ino
+ * @brief           Demonstração básica de leitura de diversos sensores
+ *                  analógicos
+ * @author          Prof. Emil Freme
+ * @license         Creative Commons Atribuição 4.0 (CC BY)
+ *******************************************************************************/</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinUmid</span> <span class="o">=</span> <span class="n">A5</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinTilt</span> <span class="o">=</span> <span class="n">A4</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinFlex</span> <span class="o">=</span> <span class="n">A3</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinForca</span> <span class="o">=</span> <span class="n">A2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinTemp</span> <span class="o">=</span> <span class="n">A1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">pinGas</span> <span class="o">=</span> <span class="n">A0</span><span class="p">;</span>
+
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinGas</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinTemp</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinForca</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinFlex</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinTilt</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">pinUmid</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Gas: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinGas</span><span class="p">));</span>
+  
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Temp: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinTemp</span><span class="p">));</span>
+  
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Forca: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinForca</span><span class="p">));</span>
+  
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Flex: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinFlex</span><span class="p">));</span>
+  
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Tilt: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinTilt</span><span class="p">));</span>
+  
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Solo: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pinUmid</span><span class="p">));</span>
+
+  <span class="n">delay</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><a href="https://www.tinkercad.com/things/1Kg4O9sOt7e-sensore-analogicos?sharecode=Ud0U6Rl68C13ORO7_eEUoVq6MTJg5C6uwJwxPMdL8i8">Projeto no Tinkecad</a></p>
+
+<p>Um ponto fundamental no uso de sensores analógicos é que, raramente, usaremos o valor bruto de 0 a 1023 em nosso projeto final. Para que a informação faça sentido para o usuário, precisamos realizar o Mapeamento.</p>
+
+<p>Mapear significa converter a escala de leitura do Arduino para uma escala que conhecemos na vida real. Por exemplo:</p>
+
+<ul>
+  <li>Transformar 0-1023 em 0-100% de umidade para um sensor de solo.</li>
+  <li>Transformar 0-1023 em 0-180 graus para controlar a posição de um servo motor.</li>
+  <li>Transformar 0-1023 em 0-5 Volts para monitorar uma bateria.</li>
+</ul>
+
+<p>No Arduino, fazemos isso facilmente com a função map():</p>
+
+<p><code class="language-plaintext highlighter-rouge">valorMapeado = map(valorLido, 0, 1023, minimo, maximo);</code></p>
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Sensores analógicos</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

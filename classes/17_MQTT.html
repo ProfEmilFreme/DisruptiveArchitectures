@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>MQTT - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h1"><a href="#mqtt-broker">MQTT Broker</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#mqtt-local-mosquitto">MQTT Local: Mosquitto</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#mqtt-client">MQTT Client</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#programa-mqtt-ping-pong-esp32">Programa “MQTT Ping Pong” ESP32</a></li>
+<li class="toc-entry toc-h2"><a href="#programa-mqtt-ping-pong-no-node-red">Programa “MQTT Ping Pong” No Node-Red</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#configurar-a-escuta-inscrição">Configurar a “Escuta” (Inscrição)</a></li>
+<li class="toc-entry toc-h3"><a href="#configurar-o-envio-publicação">Configurar o “Envio” (Publicação)</a></li>
+<li class="toc-entry toc-h3"><a href="#ativar-e-verificar">Ativar e Verificar</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#por-que-usar-um-broker-público">Por que usar um Broker Público?</a></li>
+</ul>
+</li>
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Protocolos TCP/IP (Aplicação)</span> 
+                
+                , 
+                <span class="nc ">MQTT</span>
+                
+            </div> 
+            <center><h1> MQTT</h1></center>
+            <p>O Protocolo MQTT nasce para aplicações IoT, e por isso conta com um pacote
+pequeno, assim é possivel diminuir o a quantidade de dados que trafega em nossa
+rede. Sua principal caracteristica é utilizar uma arquitetura de
+publicação/inscrição (<em>publish/subscribe</em>), isso permite uma grande
+desacoplamento entre os elementos que forma sua solução IoT.</p>
+
+<p>Assim como a maioria dos protocolos TCP/IP, no MQTT também existe o modelo
+Cliente/Servidor, contudo os clientes não se comunicam diretamente com o
+servidor para solicitar e receber dados, como acontece no HTTP, temos um
+servidor MQTT que é um Broker atuando como intermediário ente os clientes. Os
+clientes, podem publicar mensagens em tópicos, ou se inscrever para receber
+mensagens de tópicos específicos. O Broker gerencia essa comunicação: recebe as
+mensagens publicadas e distribui para os clientes inscritos. Dessa forma não
+existe necessidade de quem publica saber quem se inscreve e vice-e-versa,
+garantindo um desacoplamento entre as partes de seu sistema.</p>
+
+<p><img src="assets/mqtt01.png" alt=""></p>
+
+<h1 id="mqtt-broker">
+<a class="anchor" href="#mqtt-broker" aria-hidden="true"><span class="octicon octicon-link"></span></a>MQTT Broker</h1>
+
+<p>Para fazer os teste iniciais, existem algumas soluções de MQTT Brokers
+prontos que podemos utilizar, como o <code class="language-plaintext highlighter-rouge">test.mosquito.org</code> do projeto Eclipse
+Mosquitto, <code class="language-plaintext highlighter-rouge">broker.hivemq.com</code> da plataforma HiveMQ, e <code class="language-plaintext highlighter-rouge">broker.emqx.io</code> da
+plataforma EMQX, todos esses citados podem ser utilizado a fim de estudos e
+testes, contúdo para a entrega de um projeto eles não devem ser utilizados.</p>
+
+<p>Para fazer o deploy em projetos reails, existem diversas opções, como as
+plataformas já citadas, HiveMQ e EMQX, e também os grande players de cloud, como
+AWS (IoT Core), GCP (IoT Core) e Azure (IoT Hub) só para citar alguns que
+fornecem a solução do MQTT broker gerênciado em suas plataformas.</p>
+
+<p>Também podemos configurar um broker localmente para testes, e para isso o
+Eclipse Mosquitto é uma das melhores opções, pois é leve, open-source e
+amplamente utilizado para desenvolvimento e validação de soluções MQTT.</p>
+
+<h2 id="mqtt-local-mosquitto">
+<a class="anchor" href="#mqtt-local-mosquitto" aria-hidden="true"><span class="octicon octicon-link"></span></a>MQTT Local: Mosquitto</h2>
+
+<p>Em um ambiente Linux, com suporte a <code class="language-plaintext highlighter-rouge">snap</code>, podemos instalar com o comando</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo snap install mosquitto
+</code></pre></div></div>
+
+<p>Depois da instalação, o serviço do mosquitto já estará rodando, e poderemos
+fazer a inscrição e envio de dados com os comandos <code class="language-plaintext highlighter-rouge">mosquitto_sub</code> e
+<code class="language-plaintext highlighter-rouge">mosquitto_pub</code> respectivamente.</p>
+
+<p><img src="assets/mqtt_local_01.png" alt=""></p>
+
+<p>Da forma que está mostrado na captura de tela estamos criando uma inscrição e
+uma publicação para o serviço MQTT que está rodando localmente, ou seja
+<code class="language-plaintext highlighter-rouge">localhost</code> dentro da mesma máquina. Para acessar o serviço de outros
+dispositivos dentro da mesma rede local, precisamos saber o IP do computador que
+instalamos o Mosquitto. Caso esteja disponível na internet, utilizamos o
+endereço público para esta conexão.</p>
+
+<h1 id="mqtt-client">
+<a class="anchor" href="#mqtt-client" aria-hidden="true"><span class="octicon octicon-link"></span></a>MQTT Client</h1>
+
+<p>Agora que já entendemos o papel o Broker, vamos olhar para os
+clientes, que é qualquer dispositivo que consiga se conectar à rede de internet
+ou local, a depender da sua solução. Em outras palavras, pode ser um computador,
+uma Raspberry Pi, uma ESP32, ou qualquer outro controlador de IoT com interface de
+rede e suporte ao protocolo MQTT.</p>
+
+<p>Esses cliente que irão se inscrever ou publicar em tópicos, utilizando o Broker
+como intermediário.</p>
+
+<h2 id="programa-mqtt-ping-pong-esp32">
+<a class="anchor" href="#programa-mqtt-ping-pong-esp32" aria-hidden="true"><span class="octicon octicon-link"></span></a>Programa “MQTT Ping Pong” ESP32</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;WiFi.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;PubSubClient.h&gt;</span><span class="cp">
+</span>
+<span class="c1">// --- Configuration ---</span>
+<span class="c1">// Update with your Wi-Fi credentials</span>
+<span class="k">const</span> <span class="n">String</span> <span class="n">ssid</span> <span class="o">=</span> <span class="s">"Wokwi-GUEST"</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="c1">// Update with your MQTT broker's address</span>
+<span class="k">const</span> <span class="n">String</span> <span class="n">client_id</span> <span class="o">=</span> <span class="s">"ef-esp32-pingpong-client"</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">String</span>  <span class="n">mqtt_server</span> <span class="o">=</span> <span class="s">"broker.mqttdashboard.com"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">mqtt_port</span> <span class="o">=</span> <span class="mi">1883</span><span class="p">;</span>
+
+<span class="c1">// Define the MQTT topic for the ping-pong</span>
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">topic</span> <span class="o">=</span> <span class="s">"ef/esp32/pingpong"</span><span class="p">;</span>
+<span class="c1">// --- End of Configuration ---</span>
+
+<span class="kt">int</span> <span class="n">ping_pong_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">WiFiClient</span> <span class="n">espClient</span><span class="p">;</span>
+<span class="n">PubSubClient</span> <span class="nf">client</span><span class="p">(</span><span class="n">espClient</span><span class="p">);</span>
+
+<span class="kt">long</span> <span class="n">lastMsg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">msg</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// This function is called whenever a message arrives on a subscribed topic</span>
+<span class="kt">void</span> <span class="nf">callback</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">topic</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">payload</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Message arrived on topic: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">topic</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">". Message: "</span><span class="p">);</span>
+  <span class="n">String</span> <span class="n">message</span><span class="p">;</span>
+  
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">message</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">payload</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">message</span> <span class="o">==</span> <span class="s">"PING"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Received PING..."</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">message</span> <span class="o">==</span> <span class="s">"PONG"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Received PONG..."</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Reconnects to the MQTT broker if the connection is lost</span>
+<span class="kt">void</span> <span class="nf">reconnect</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Loop until we're reconnected</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connected</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Attempting MQTT connection..."</span><span class="p">);</span>
+    
+    <span class="c1">// Attempt to connect</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">client_id</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span> <span class="p">{</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"connected!"</span><span class="p">);</span>
+
+      <span class="c1">// Subscribe to the topic</span>
+      <span class="n">client</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topic</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Subscribed to topic: "</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">topic</span><span class="p">);</span>
+      
+      <span class="k">if</span><span class="p">(</span><span class="n">ping_pong_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="c1">// Publish the initial "PING" message to start the loop</span>
+        <span class="n">client</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s">"PING"</span><span class="p">);</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Send Ping"</span><span class="p">);</span>
+        <span class="n">ping_pong_state</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="n">client</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="s">"PONG"</span><span class="p">);</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Send PONG"</span><span class="p">);</span>
+        <span class="n">ping_pong_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">}</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"failed, rc="</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="n">state</span><span class="p">());</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">" try again in 5 seconds"</span><span class="p">);</span>
+      <span class="c1">// Wait 5 seconds before retrying</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+
+  <span class="c1">// Connect to Wi-Fi</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Connecting to "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">ssid</span><span class="p">);</span>
+
+  <span class="n">WiFi</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">ssid</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">status</span><span class="p">()</span> <span class="o">!=</span> <span class="n">WL_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"WiFi connected"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"IP address: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">localIP</span><span class="p">());</span>
+
+  <span class="c1">// Configure MQTT client</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">setServer</span><span class="p">(</span><span class="n">mqtt_server</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">mqtt_port</span><span class="p">);</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">setCallback</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connected</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">reconnect</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="c1">// This allows the client to process incoming messages and maintain its connection</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">loop</span><span class="p">();</span> 
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="programa-mqtt-ping-pong-no-node-red">
+<a class="anchor" href="#programa-mqtt-ping-pong-no-node-red" aria-hidden="true"><span class="octicon octicon-link"></span></a>Programa “MQTT Ping Pong” No Node-Red</h2>
+
+<p><img src="assets/node_red_ping_pong.png" alt=""></p>
+
+<h3 id="configurar-a-escuta-inscrição">
+<a class="anchor" href="#configurar-a-escuta-inscri%C3%A7%C3%A3o" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurar a “Escuta” (Inscrição)</h3>
+
+<ol>
+  <li>Arraste um nó mqtt in para o canvas.</li>
+  <li>Dê um clique duplo para editar. Em “Server”, selecione Add new mqtt-broker
+clicando no <code class="language-plaintext highlighter-rouge">+</code>.</li>
+  <li>Na aba Connection, preencha:
+ Server: broker.emqx.io
+ Port: 1883</li>
+  <li>Clique em Add. De volta à tela anterior, configure o tópico:
+ Topic: aula_disruptive/teste/seu_nome (Dica: use um tópico único com seu nome,
+ pois como o broker é público, todos podem ver as mensagens).</li>
+  <li>Conecte um nó debug à saída deste nó.</li>
+</ol>
+
+<h3 id="configurar-o-envio-publicação">
+<a class="anchor" href="#configurar-o-envio-publica%C3%A7%C3%A3o" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configurar o “Envio” (Publicação)</h3>
+
+<ol>
+  <li>Arraste um nó inject.</li>
+  <li>Configure o Payload como string e escreva Mensagem via Nuvem.</li>
+  <li>Configure o Repeat para interval a cada 5 seconds.</li>
+  <li>Arraste um nó mqtt out.</li>
+  <li>Dê um clique duplo. Certifique-se de que o Server broker.emqx.io:1883</li>
+  <li>está selecionado.</li>
+  <li>No campo Topic, coloque exatamente o mesmo tópico que você usou no passo</li>
+  <li>anterior: aula_disruptive/teste/seu_nome.</li>
+  <li>Conecte o nó inject ao nó mqtt out.</li>
+</ol>
+
+<h3 id="ativar-e-verificar">
+<a class="anchor" href="#ativar-e-verificar" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ativar e Verificar</h3>
+
+<p>Clique em Deploy.</p>
+
+<p>Observe abaixo dos nós MQTT: se estiver tudo certo, aparecerá o status
+verde “connected”.</p>
+
+<p>Abra a aba Debug na lateral direita. Você verá sua mensagem chegando via
+internet, processada pelo broker público.</p>
+
+<h2 id="por-que-usar-um-broker-público">
+<a class="anchor" href="#por-que-usar-um-broker-p%C3%BAblico" aria-hidden="true"><span class="octicon octicon-link"></span></a>Por que usar um Broker Público?</h2>
+
+<p>O broker.emqx.io permite que você envie dados de um ESP32 em sua casa e receba no
+Node-RED rodando em outro lugar.</p>
+
+<p>Podemos usar:</p>
+
+<ul>
+  <li>EMQX : broker.emqx.io</li>
+  <li>HiveMQ: broker.hivemq.com</li>
+  <li>Mosquito: test.mosquitto.org</li>
+  <li>Eclipse: mqtt.eclipseproject.io</li>
+</ul>
+
+<blockquote>
+  <p>Atenção: Como o broker é público, não envie senhas ou informações sensíveis por
+esses tópicos, pois qualquer pessoa conectada ao broker.emqx.io pode “escutar” o
+seu tópico se souber o nome dele.</p>
+</blockquote>
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Protocolos TCP/IP (Aplicação)</span> 
+                
+                , 
+                <span class="nc ">MQTT</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <title>Projeto: Genius - Disruptive Architectures</title>
+        <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+        <link rel="stylesheet" href="/DisruptiveArchitectures/assets/css/main.css" id="maincss">
+    </head>
+    <body>
+        <nav>
+    
+    <a href="#" onclick="toggle_menu()" id="hamb_menu">☰</a>
+    
+    <a href="/DisruptiveArchitectures/">Index</a>&nbsp;
+    <a href="#" onclick="toggle_themes()">Mudar Tema</a>
+</nav>
+
+        <aside id="course_menu">
+    
+    
+    <b class="course_name">Disruptive Architectures</b>
+
+    
+    <b class="section_name">Sobre a disciplina</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/00_index.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/01_notas.html" class="class_link">Notas</a>
+    
+    <a href="/DisruptiveArchitectures/classes/02_Cronograma.html" class="class_link">Cronograma</a>
+    
+    
+    <b class="section_name">IoT</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/03_definicoes.html" class="class_link">Definições de IoT</a>
+    
+    <a href="/DisruptiveArchitectures/classes/04_circuitoseletricos.html" class="class_link">Circuítos (eletro)eletrônicos</a>
+    
+    
+    <b class="section_name">Sistemas Embarcados</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/05_sistemas_embarcados.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/06_arduino.html" class="class_link">Arduino</a>
+    
+    
+    <b class="section_name">Protocolos M2M</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/07_m2m.html" class="class_link">Introdução</a>
+    
+    <a href="/DisruptiveArchitectures/classes/08_UART.html" class="class_link">UART</a>
+    
+    <a href="/DisruptiveArchitectures/classes/09_I2C.html" class="class_link">I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/10_SPI.html" class="class_link">SPI</a>
+    
+    
+    <b class="section_name">Sensores, Atuadores e IO</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/11_sensore_controladores.html" class="class_link">Input: Keypad</a>
+    
+    <a href="/DisruptiveArchitectures/classes/13_multisensores_analogicos.html" class="class_link">Sensores analógicos</a>
+    
+    <a href="/DisruptiveArchitectures/classes/14_motores.html" class="class_link">Motores</a>
+    
+    <a href="/DisruptiveArchitectures/classes/12_lcdi2c.html" class="class_link">Output: LCD 16x2 I2C</a>
+    
+    <a href="/DisruptiveArchitectures/classes/15_genius.html" class="class_link">Projeto: Genius</a>
+    
+    
+    <b class="section_name">Backend</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/16_node_red.html" class="class_link">Node-Red</a>
+    
+    
+    <b class="section_name">Protocolos TCP/IP (Aplicação)</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/17_MQTT.html" class="class_link">MQTT</a>
+    
+    
+    <b class="section_name">Desafio</b>
+    
+    
+    <a href="/DisruptiveArchitectures/classes/18_Desafio.html" class="class_link">Genius + MQTT + Dashboard</a>
+    
+    
+
+
+  
+</aside>
+
+        <aside id="toc_menu" style="float:right"> 
+    <ul id="toc" class="section-nav">
+</ul>
+</aside>
+
+        <main>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Projeto: Genius</span>
+                
+            </div> 
+            <center><h1> Projeto: Genius</h1></center>
+            <p>Na aula passada, desenvolvemos a estrutura lógica inicial de um jogo de memória
+estilo Genius (ou Simon Says). O foco foi configurar os componentes básicos,
+como LEDs, botões e buzzer, além de criar a sequência aleatória de cores.</p>
+
+<p>Para fazer o jogo funcionar, criamos uma maquina de estados, e então a loop
+apenas gerência qual estado irá executar.</p>
+
+<p><img src="assets/estadosgenius.png" alt="Diagrama dos estados do jogo"></p>
+
+<p>Nosso diagram no Wokwi ficou assim:</p>
+
+<p><img src="assets/diagramagenius.png" alt="Diagrama Genius"></p>
+
+<p>e nosso código</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+<span class="c1">// Definição dos pinos para os botões (Inputs)</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">inverm</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span> <span class="c1">// Vermelho</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">inverd</span> <span class="o">=</span> <span class="mi">14</span><span class="p">;</span> <span class="c1">// Verde</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">inazul</span> <span class="o">=</span> <span class="mi">27</span><span class="p">;</span> <span class="c1">// Azul</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">inamar</span> <span class="o">=</span> <span class="mi">26</span><span class="p">;</span> <span class="c1">// Amarelo</span>
+
+<span class="c1">// Definição dos pinos para os LEDs (Outputs)</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">outverm</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">outverd</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">outazul</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">outamar</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">buzzer</span> <span class="o">=</span> <span class="mi">19</span><span class="p">;</span> <span class="c1">// Pino do Buzzer</span>
+
+<span class="c1">// Máquina de Estados para organizar o fluxo do jogo</span>
+<span class="k">typedef</span> <span class="k">enum</span> <span class="n">ESTADOS</span> <span class="p">{</span>
+  <span class="n">STARTUP</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1">// Sequência de início</span>
+  <span class="n">GAME</span><span class="p">,</span>        <span class="c1">// Jogo rodando</span>
+  <span class="n">GAMEOVER</span>     <span class="c1">// Fim de jogo</span>
+<span class="p">}</span> <span class="n">estados</span><span class="p">;</span>
+
+<span class="n">estados</span> <span class="n">estadoAtual</span><span class="p">;</span> <span class="c1">// Armazena o estado atual do programa</span>
+
+<span class="c1">// Função que faz a animação inicial e toca sons ao ligar</span>
+<span class="kt">void</span> <span class="nf">runStartup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">440</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">455</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">470</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">485</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  
+  <span class="c1">// Apaga tudo após a sequência</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">noTone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">);</span>
+  
+  <span class="n">estadoAtual</span> <span class="o">=</span> <span class="n">GAME</span><span class="p">;</span> <span class="c1">// Muda para o estado de jogo</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">GameState</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    <span class="c1">// 0: Mostra sequência / 1: Espera jogador</span>
+<span class="kt">int</span> <span class="n">cores</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span> <span class="c1">// Array que guarda a sequência de cores</span>
+<span class="kt">int</span> <span class="n">nivel</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        <span class="c1">// Nível atual (quantas cores o jogador deve acertar)</span>
+<span class="kt">int</span> <span class="n">atual</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        <span class="c1">// Índice da cor que o jogador está tentando acertar agora</span>
+<span class="kt">int</span> <span class="n">keyDown</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>      <span class="c1">// Trava lógica para evitar que um clique longo conte como vários</span>
+
+<span class="c1">// Função auxiliar para ligar o LED e tocar o som correspondente a uma cor</span>
+<span class="kt">void</span> <span class="nf">mostraCor</span><span class="p">(</span><span class="kt">int</span> <span class="n">cor</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Vermelho</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">440</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Verde</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">420</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Azul</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">400</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Amarelo</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">460</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span> <span class="c1">// Mantém ligado por 200ms</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">noTone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Lê qual botão está pressionado e retorna o número da cor (1 a 4) ou 0 se nenhum</span>
+<span class="kt">int</span> <span class="nf">leInput</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">inverm</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">inverd</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">inazul</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">inamar</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">4</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Debug: imprime a sequência atual de cores no Monitor Serial</span>
+<span class="kt">void</span> <span class="nf">printLevels</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="n">coresAscii</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">'_'</span><span class="p">,</span> <span class="sc">'R'</span><span class="p">,</span> <span class="sc">'G'</span><span class="p">,</span> <span class="sc">'B'</span><span class="p">,</span> <span class="sc">'Y'</span><span class="p">};</span>
+  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">coresAscii</span><span class="p">[</span><span class="n">cores</span><span class="p">[</span><span class="n">i</span><span class="p">]]);</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">runGame</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Running Game"</span><span class="p">);</span>
+  
+  <span class="c1">// FASE 0: O jogo mostra a sequência para o jogador</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">GameState</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cores</span><span class="p">[</span><span class="n">nivel</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> <span class="c1">// Gera uma cor aleatória (1 a 4)</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">nivel</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">mostraCor</span><span class="p">(</span><span class="n">cores</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="c1">// Brilha os LEDs da sequência</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">GameState</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Muda para fase de entrada do jogador</span>
+  <span class="p">}</span>
+  <span class="c1">// FASE 1: O jogo espera o input do jogador</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="n">printLevels</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">atual</span> <span class="o">&lt;=</span> <span class="n">nivel</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">int</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">leInput</span><span class="p">();</span>
+      
+      <span class="c1">// LOGICA DE "KEY DOWN":</span>
+      <span class="c1">// Só entra aqui se um botão foi apertado (cor != 0) E se ele não estava apertado antes (keyDown == 0)</span>
+      <span class="k">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">keyDown</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">keyDown</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Trava: o código não processará novos cliques até soltar o botão</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="n">cores</span><span class="p">[</span><span class="n">atual</span><span class="p">])</span> <span class="p">{</span> <span class="c1">// Acertou a cor da sequência?</span>
+          <span class="n">atual</span><span class="o">++</span><span class="p">;</span> <span class="c1">// Vai para a próxima cor</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="n">estadoAtual</span> <span class="o">=</span> <span class="n">GAMEOVER</span><span class="p">;</span> <span class="c1">// Errou, fim de jogo</span>
+        <span class="p">}</span>
+      <span class="p">}</span> 
+      <span class="c1">// Se o jogador soltar o botão (leInput retorna 0), destravamos o keyDown</span>
+      <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">cor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">keyDown</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// Se o jogador acertou toda a sequência do nível atual</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="n">GameState</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Volta para mostrar a nova sequência</span>
+      <span class="n">nivel</span><span class="o">++</span><span class="p">;</span>       <span class="c1">// Aumenta a dificuldade</span>
+      <span class="n">atual</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>     <span class="c1">// Reseta o contador de acertos do nível</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Função de fim de jogo: toca som grave e pisca todos os LEDs</span>
+<span class="kt">void</span> <span class="nf">runGameOver</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="mi">220</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">noTone</span><span class="p">(</span><span class="n">buzzer</span><span class="p">);</span>
+  <span class="c1">// Aqui você poderia resetar as variáveis para reiniciar o jogo</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">estadoAtual</span> <span class="o">=</span> <span class="n">STARTUP</span><span class="p">;</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Hello, ESP32!"</span><span class="p">);</span>
+
+  <span class="c1">// Configuração dos Pinos</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">inverm</span><span class="p">,</span> <span class="n">INPUT_PULLDOWN</span><span class="p">);</span> <span class="c1">// Garante 0V quando solto</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">inverd</span><span class="p">,</span> <span class="n">INPUT_PULLDOWN</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">inazul</span><span class="p">,</span> <span class="n">INPUT_PULLDOWN</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">inamar</span><span class="p">,</span> <span class="n">INPUT_PULLDOWN</span><span class="p">);</span>
+
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">outverm</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">outverd</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">outazul</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">outamar</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">buzzer</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  
+  <span class="n">randomSeed</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span> <span class="c1">// Inicializa o gerador de números aleatórios</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// O loop apenas gerencia em qual estado o jogo está</span>
+  <span class="k">switch</span><span class="p">(</span><span class="n">estadoAtual</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">STARTUP</span><span class="p">:</span>
+      <span class="n">runStartup</span><span class="p">();</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">GAME</span><span class="p">:</span>
+      <span class="n">runGame</span><span class="p">();</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">GAMEOVER</span><span class="p">:</span>
+      <span class="n">runGameOver</span><span class="p">();</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+            <hr/>
+            <div style="font-size:1.1em;font-weight:700;margin:1em"
+                class="highlight">
+                public class 
+                
+                <span class="nc ">Disruptive Architectures</span>
+                :
+                <span class="nc ">Sensores, Atuadores e IO</span> 
+                
+                , 
+                <span class="nc ">Projeto: Genius</span>
+                
+            </div> 
+        </main>
+        <script type="text/javascript" src="/DisruptiveArchitectures/assets/scripts.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js "></script>
+        <script type="module">
+            mermaid.initialize({theme:"neutral",
+                                securityLevel: "strict",
+                                startOnLoad: true
+                                });
+        </script>
+    </body>
+</html>
