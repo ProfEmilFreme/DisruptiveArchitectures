@@ -274,9 +274,10 @@ string do Resource! Você deverá trocar pelas suas informações</em></p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<blockquote class="attention">
-  <p>Podemos utiliza a seguinte politica para testes, contúdo essa é uma falha crítica
+<div class="attention">
+  <p>Podemos utilizar a seguinte politica para testes, contudo essa é uma falha crítica
 de segurança</p>
+
   <div class="language-json highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
@@ -289,10 +290,14 @@ de segurança</p>
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>  </div>
+
   <p>Essa política concede poder total (Allow *) sobre todo o seu ambiente IoT.</p>
 
-  <p>O Problema: Ela viola o Princípio do Menor Privilégio. Se um único sensor for invadido, o hacker ganha a “chave mestra” para controlar, espiar ou deletar toda a sua frota. Segurança zero!</p>
-</blockquote>
+  <p>O Problema: Ela viola o Princípio do Menor Privilégio. Se um único sensor for
+invadido, o hacker ganha a “chave mestra” para controlar, espiar ou deletar
+toda a sua frota. Segurança zero!</p>
+
+</div>
 
 <p>Feito isso verifique se está tudo correto, e clique em <em>“Create”</em></p>
 
