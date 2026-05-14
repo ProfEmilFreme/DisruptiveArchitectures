@@ -97,7 +97,7 @@
     
     <a href="/DisruptiveArchitectures/classes/19_IoTPlatforms.html" class="class_link">AWS IoT Core: Things</a>
     
-    <a href="/DisruptiveArchitectures/classes/20_IoTPlatformsDevice.html" class="class_link">Configurando o Dispositivo</a>
+    <a href="/DisruptiveArchitectures/classes/20_IoTPlatformsDevice.html" class="class_link">Configurando um dispositivo</a>
     
     
 
@@ -152,14 +152,14 @@ principais, uma composta pelas “Coisas” que chamamos de <strong>edge</strong
 composta pela <strong><em>cloud</em></strong>. A comunicação entre as duas partes é feita através de
 um <strong>gateway</strong>.</p>
 
-<p><img src="../assets/cloudgateway.png" alt=""></p>
+<p><img src="assets/cloudgateway.png" alt=""></p>
 
 <p>Os dispositivos da <strong>edge</strong> podem se comunicar diretamente com o <strong>“Cloud
 Gateway”</strong> caso consigam, como é o caso da ESP32 que já possui módulo WiFi. Ou
 pode ser necessário agregar as informações dos sensores e controladores em um
 <strong>“Edge Gateway”</strong> que esse sim se comunica com o <strong>“Cloud Gateway”</strong>.</p>
 
-<p><img src="../assets/edgegateway.png" alt=""></p>
+<p><img src="assets/edgegateway.png" alt=""></p>
 
 <p>O Cloud Gateway atua como um endpoint único que distribui milhões de conexões
 MQTT entre múltiplos servidores internos. Ele gerencia o peso das sessões
@@ -174,7 +174,8 @@ dados, o que garante uma camada maior de segurança de sua aplicação</p>
 dedicado, todas as camadas de gerenciamento e segurança deverão ser
 desenvolvidas por sua solução.</p>
 
-<p>Nos próximos tópicos estaremos configurando o AWS IoT Core para conectar um dispositivo a Cloud.</p>
+<p>Nos próximos tópicos estaremos configurando o AWS IoT Core para conectar um
+dispositivo a Cloud.</p>
 
 <h2 id="iot-core-criando-um-thing">
 <a class="anchor" href="#iot-core-criando-um-thing" aria-hidden="true"><span class="octicon octicon-link"></span></a>IoT Core: Criando um <strong>Thing</strong>.</h2>
@@ -182,11 +183,11 @@ desenvolvidas por sua solução.</p>
 <p>Depois de feito login em seu console da AWS procure em serviços <em>Internet of
 Things</em></p>
 
-<p><img src="../assets/awsservices.png" alt=""></p>
+<p><img src="assets/awsservices.png" alt=""></p>
 
 <p>Depois procure por IoT Core e acesse.</p>
 
-<p><img src="../assets/iotcore01.png" alt=""></p>
+<p><img src="assets/iotcore01.png" alt=""></p>
 
 <p>Para fazer a integração, precisamos criar um <em>“Thing”</em>, no menu esquerdo
 procure por <code class="language-plaintext highlighter-rouge">Manage &gt; All Devices &gt; Things</code> e acesse.</p>
@@ -194,13 +195,13 @@ procure por <code class="language-plaintext highlighter-rouge">Manage &gt; All D
 <p>Nesta pagina é possível gerenciar todos os seus dispositivos. Para criar um novo,
 clique no botão <strong>“Create things”</strong></p>
 
-<p><img src="../assets/createthings.png" alt=""></p>
+<p><img src="assets/createthings.png" alt=""></p>
 
 <p>Podemos criar diversos dispositivos de uma só vez, ou apenas um. Por
 simplicidade criaremos apenas um. Selecione <em>“Create single thing”</em> e clique
 em <em>Next</em></p>
 
-<p><img src="../assets/createonething.png" alt=""></p>
+<p><img src="assets/createonething.png" alt=""></p>
 
 <p>O próximo passo é definir alguns atributos da “Coisa” que estamos criando. Ela
 irá precisar de um nome identificador. Este será o ID do dispositivo na
@@ -213,30 +214,30 @@ sensor volta, a AWS sincroniza o estado automaticamente. Para este documento
 não utilizaremos.</p>
 </blockquote>
 
-<p><img src="../assets/creatthingproperties.png" alt=""></p>
+<p><img src="assets/creatthingproperties.png" alt=""></p>
 
 <p>Agora a AWS irá pedir para criar um certificado para o dispositivo se conectar a
 plataforma. Selecione <em>“Auto-generate a new certificate”</em> assim a amazon irá
 gerar todos os certificados necessários. Depois de selecionado clique em <em>Next</em></p>
 
-<p><img src="../assets/createthingcetificate.png" alt=""></p>
+<p><img src="assets/createthingcetificate.png" alt=""></p>
 
 <p>Próximo passo é criar uma política de acesso, que é responsável por habilitar ou
 negar o acesso a serviços dentro da plataforma. Para criar uma nova política
 clique em <em>“Create policy”</em>. Uma nova aba será aberta para fazer esse processo.</p>
 
-<p><img src="../assets/createthingpolicy01.png" alt=""></p>
+<p><img src="assets/createthingpolicy01.png" alt=""></p>
 
 <p>Precisamos definir um nome para essa nova politica de acesso, e depois vamos utilizar
 as <em>“Policy Examples”</em> para iniciar a criação dela.</p>
 
-<p><img src="../assets/createthingpolicy02.png" alt=""></p>
+<p><img src="assets/createthingpolicy02.png" alt=""></p>
 
 <p>Ao clicar em <em>“Policy Examples”</em> procure por aquela que com o nome <code class="language-plaintext highlighter-rouge">Publish to
 any topic prefixed by the thing name</code>, clique em sua caixa de seleção e depois
 em _“Add to policy”</p>
 
-<p><img src="../assets/createthingpolicy03.png" alt=""></p>
+<p><img src="assets/createthingpolicy03.png" alt=""></p>
 
 <p>Feito isso, alguns <strong>statements</strong> já foram criados para nós, e o mais importante
 com o campo <strong>Policy resource</strong> correto, que é algo como</p>
@@ -301,7 +302,7 @@ toda a sua frota. Segurança zero!</p>
 
 <p>Feito isso verifique se está tudo correto, e clique em <em>“Create”</em></p>
 
-<p><img src="../assets/finishpolicy.png" alt=""></p>
+<p><img src="assets/finishpolicy.png" alt=""></p>
 
 <p>Esta política implementa um isolamento de segurança por dispositivo:</p>
 
@@ -315,28 +316,28 @@ usando a mesma política.</p>
 
 <p>Depois da politica criada ela estará listada em sua lista de políticas</p>
 
-<p><img src="../assets/listpolicies.png" alt=""></p>
+<p><img src="assets/listpolicies.png" alt=""></p>
 
 <p>Agora volte a página anterior, se sua nova politica não estiver listada, clique
-no botão de atualização. Selecione a política recem criada, e clique em <em>“Create
+no botão de atualização. Selecione a política recém criada, e clique em <em>“Create
 thing”</em>.</p>
 
-<p><img src="../assets/addpolicy.png" alt=""></p>
+<p><img src="assets/addpolicy.png" alt=""></p>
 
 <p><span style="color:red; font-size:2em">CUIDADO!</span> Depois de clicar em
 <em>“Create thing”</em> será apresentado um pop-up para download dos certificados. Essa
-é a unica vêz que eles podem ser baixados. Certifique-se de fazer
-download de todos e guarda-los em um lugar seguro.</p>
+é a única vez que eles podem ser baixados. Certifique-se de fazer
+download de todos e guardá-los em um lugar seguro.</p>
 
-<p><img src="../assets/certificatesDownload.png" alt=""></p>
+<p><img src="assets/certificatesDownload.png" alt=""></p>
 
 <p>Esses certificados serão utilizados para garantir a identidade de nossos
-dispositívos.</p>
+dispositivos.</p>
 
-<p>Depois de feito o download, clique em <em>“Done”</em>, seu dispositívo deverá ser
+<p>Depois de feito o download, clique em <em>“Done”</em>, seu dispositivo deverá ser
 listado na lista de <strong>Things</strong></p>
 
-<p><img src="../assets/listthingcreated.png" alt=""></p>
+<p><img src="assets/listthingcreated.png" alt=""></p>
 
 
             <hr/>

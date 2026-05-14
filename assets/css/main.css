@@ -209,6 +209,8 @@ pre.highlight, pre figure > pre {
   top: 41px;
   width: 20%;
   max-width: 25ch;
+  max-height: 99vh;
+  overflow-y: scroll;
   margin: 0;
   float: left;
   border-right: 1px solid #bbadd1;
