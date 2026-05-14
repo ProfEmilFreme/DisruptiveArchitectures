@@ -30,7 +30,7 @@ composta pela **_cloud_**. A comunicação entre as duas partes é feita atravé
 um **gateway**.  
 
 
-![](../assets/cloudgateway.png)
+![](assets/cloudgateway.png)
 
 Os dispositivos da __edge__ podem se comunicar diretamente com o __"Cloud
 Gateway"__ caso consigam, como é o caso da ESP32 que já possui módulo WiFi. Ou
@@ -38,7 +38,7 @@ pode ser necessário agregar as informações dos sensores e controladores em um
 __"Edge Gateway"__ que esse sim se comunica com o __"Cloud Gateway"__.
 
 
-![](../assets/edgegateway.png)
+![](assets/edgegateway.png)
 
 O Cloud Gateway atua como um endpoint único que distribui milhões de conexões
 MQTT entre múltiplos servidores internos. Ele gerencia o peso das sessões
@@ -53,18 +53,19 @@ Caso você utilize uma plataforma cloud que não ofereça o serviço de IoT
 dedicado, todas as camadas de gerenciamento e segurança deverão ser
 desenvolvidas por sua solução. 
 
-Nos próximos tópicos estaremos configurando o AWS IoT Core para conectar um dispositivo a Cloud.
+Nos próximos tópicos estaremos configurando o AWS IoT Core para conectar um
+dispositivo a Cloud.
 
 ## IoT Core: Criando um __Thing__. 
 
 Depois de feito login em seu console da AWS procure em serviços *Internet of
 Things*
 
-![](../assets/awsservices.png)
+![](assets/awsservices.png)
 
 Depois procure por IoT Core e acesse. 
 
-![](../assets/iotcore01.png)
+![](assets/iotcore01.png)
 
 Para fazer a integração, precisamos criar um _"Thing"_, no menu esquerdo
 procure por `Manage > All Devices > Things` e acesse. 
@@ -72,14 +73,14 @@ procure por `Manage > All Devices > Things` e acesse.
 Nesta pagina é possível gerenciar todos os seus dispositivos. Para criar um novo,
 clique no botão __"Create things"__
 
-![](../assets/createthings.png)
+![](assets/createthings.png)
 
 Podemos criar diversos dispositivos de uma só vez, ou apenas um. Por
 simplicidade criaremos apenas um. Selecione _"Create single thing"_ e clique
 em _Next_
 
 
-![](../assets/createonething.png)
+![](assets/createonething.png)
 
 
 O próximo passo é definir alguns atributos da "Coisa" que estamos criando. Ela
@@ -91,27 +92,27 @@ plataforma.
 > sensor volta, a AWS sincroniza o estado automaticamente. Para este documento
 > não utilizaremos.
 
-![](../assets/creatthingproperties.png)
+![](assets/creatthingproperties.png)
 
 Agora a AWS irá pedir para criar um certificado para o dispositivo se conectar a
 plataforma. Selecione _"Auto-generate a new certificate"_ assim a amazon irá
 gerar todos os certificados necessários. Depois de selecionado clique em _Next_
 
 
-![](../assets/createthingcetificate.png)
+![](assets/createthingcetificate.png)
 
 Próximo passo é criar uma política de acesso, que é responsável por habilitar ou
 negar o acesso a serviços dentro da plataforma. Para criar uma nova política
 clique em _"Create policy"_. Uma nova aba será aberta para fazer esse processo. 
 
 
-![](../assets/createthingpolicy01.png)
+![](assets/createthingpolicy01.png)
 
 Precisamos definir um nome para essa nova politica de acesso, e depois vamos utilizar
 as _"Policy Examples"_ para iniciar a criação dela. 
 
 
-![](../assets/createthingpolicy02.png)
+![](assets/createthingpolicy02.png)
 
 
 Ao clicar em _"Policy Examples"_ procure por aquela que com o nome `Publish to
@@ -119,7 +120,7 @@ any topic prefixed by the thing name`, clique em sua caixa de seleção e depois
 em _"Add to policy"
 
 
-![](../assets/createthingpolicy03.png)
+![](assets/createthingpolicy03.png)
 
 Feito isso, alguns __statements__ já foram criados para nós, e o mais importante
 com o campo __Policy resource__ correto, que é algo como 
@@ -159,9 +160,10 @@ string do Resource! Você deverá trocar pelas suas informações_
 }
 ```
 
-{:.attention}
-> Podemos utiliza a seguinte politica para testes, contúdo essa é uma falha crítica
-> de segurança
+<div class="attention" markdown="1">
+Podemos utilizar a seguinte politica para testes, contudo essa é uma falha crítica
+de segurança
+
 ```json 
 {
   "Version": "2012-10-17",
@@ -174,14 +176,19 @@ string do Resource! Você deverá trocar pelas suas informações_
   ]
 }
 ```
-> Essa política concede poder total (Allow *) sobre todo o seu ambiente IoT.
-> 
-> O Problema: Ela viola o Princípio do Menor Privilégio. Se um único sensor for invadido, o hacker ganha a "chave mestra" para controlar, espiar ou deletar toda a sua frota. Segurança zero!
+
+Essa política concede poder total (Allow *) sobre todo o seu ambiente IoT.
+
+O Problema: Ela viola o Princípio do Menor Privilégio. Se um único sensor for
+invadido, o hacker ganha a "chave mestra" para controlar, espiar ou deletar
+toda a sua frota. Segurança zero!
+
+</div>
 
 Feito isso verifique se está tudo correto, e clique em _"Create"_
 
 
-![](../assets/finishpolicy.png)
+![](assets/finishpolicy.png)
 
 Esta política implementa um isolamento de segurança por dispositivo:
 
@@ -196,30 +203,30 @@ usando a mesma política.
 Depois da politica criada ela estará listada em sua lista de políticas
 
 
-![](../assets/listpolicies.png)
+![](assets/listpolicies.png)
 
 Agora volte a página anterior, se sua nova politica não estiver listada, clique
-no botão de atualização. Selecione a política recem criada, e clique em _"Create
+no botão de atualização. Selecione a política recém criada, e clique em _"Create
 thing"_.
 
 
-![](../assets/addpolicy.png)
+![](assets/addpolicy.png)
 
 <span style="color:red; font-size:2em">CUIDADO!</span> Depois de clicar em
 _"Create thing"_ será apresentado um pop-up para download dos certificados. Essa
-é a unica vêz que eles podem ser baixados. Certifique-se de fazer
-download de todos e guarda-los em um lugar seguro.
+é a única vez que eles podem ser baixados. Certifique-se de fazer
+download de todos e guardá-los em um lugar seguro.
 
 
-![](../assets/certificatesDownload.png)
+![](assets/certificatesDownload.png)
 
 Esses certificados serão utilizados para garantir a identidade de nossos
-dispositívos. 
+dispositivos. 
 
-Depois de feito o download, clique em _"Done"_, seu dispositívo deverá ser
+Depois de feito o download, clique em _"Done"_, seu dispositivo deverá ser
 listado na lista de __Things__
 
 
-![](../assets/listthingcreated.png)
+![](assets/listthingcreated.png)
 
 
