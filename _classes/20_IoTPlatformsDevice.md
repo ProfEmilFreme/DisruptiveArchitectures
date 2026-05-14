@@ -176,11 +176,12 @@ while true:
 from time import sleep
 from json import dumps
 from random import randrange
+from sys import exit
 from awscrt import mqtt
 from awsiot import mqtt_connection_builder
 
 # Connection details
-ENDPOINT = "a2yz72p2ve125a-ats.iot.us-east-2.amazonaws.com"
+ENDPOINT = "<seu endpoint>.amazonaws.com"
 CLIENT_ID = "meu_dispositivo_iot"
 CERTIFICADO = "mdi-certificate.pem.crt"
 CHAVE_PRIVADA = "mdi-private.pem.key"
