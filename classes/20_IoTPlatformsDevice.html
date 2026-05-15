@@ -434,6 +434,215 @@ conteúdo do seuthing-private.pem.key
 
 <p><img src="assets/chaveschumbadas.png" alt="dd"></p>
 
+<p>Agora volte para o arquivo principal do seu Sketch (nome.ino).</p>
+
+<p>Começando pelos includes…</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"constantes.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;WiFiClientSecure.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;MQTTClient.h&gt;</span><span class="c1"> </span><span class="cp">
+#include</span> <span class="cpf">&lt;ArduinoJson.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;WiFi.h&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>Feito isso, vamos criar as referências globais que utilizaremos para nos
+conectar.</p>
+
+<ul>
+  <li>Com o <code class="language-plaintext highlighter-rouge">WiFiClientSecure</code> conseguimos inserir os certificados, chaves e
+identidades necessários para a conexão.</li>
+  <li>O <code class="language-plaintext highlighter-rouge">MQTTClient</code> é a conexão para publicação ou inscrição em um MQTT Broker</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">WiFiClientSecure</span> <span class="n">net</span> <span class="o">=</span> <span class="n">WiFiClientSecure</span><span class="p">();</span>
+<span class="n">MQTTClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">MQTTClient</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>próximo passo é fazer a conexão com o WiFi.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">ConectaWiFi</span><span class="p">(){</span>
+  <span class="n">WiFi</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">WIFI_STA</span><span class="p">);</span>
+  <span class="n">WiFi</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">WIFI_SSID</span><span class="p">,</span> <span class="n">WIFI_PASSWORD</span><span class="p">);</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Conectando ao WiFi..."</span><span class="p">);</span>
+
+  <span class="k">while</span><span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">status</span><span class="p">()</span> <span class="o">!=</span> <span class="n">WL_CONNECTED</span><span class="p">){</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Configuramos então a conexão com os arquivos necessários fornecidos pela AWS.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">ConfiguraCertificados</span><span class="p">(){</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setCACert</span><span class="p">(</span><span class="n">ROOT</span><span class="p">);</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setCertificate</span><span class="p">(</span><span class="n">CERTIFICADO</span><span class="p">);</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setPrivateKey</span><span class="p">(</span><span class="n">CHAVE_PRIVADA</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Configuramos a conexão com MQTT:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">ConfiguraMQTT</span><span class="p">(){</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">ENDPOINT</span><span class="p">,</span> <span class="mi">8883</span><span class="p">,</span> <span class="n">net</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Conectando ao AWS IoT"</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">CLIENT_ID</span><span class="p">)){</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connected</span><span class="p">()){</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"AWS IoT Timeout!"</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"AWS IoT Connectada!"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Depois que construimos todas essas funções de configuração, vamos utilizar na
+função setup:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="n">ConectaWiFi</span><span class="p">();</span>
+  <span class="n">ConfiguraCertificados</span><span class="p">();</span>
+  <span class="n">ConfiguraMQTT</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Agora antes da nossa função loop, vamos definir uma função para ler um sensor, e
+enviar o dado para a cloud.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">publicaMensagem</span><span class="p">(){</span>
+  <span class="n">StaticJsonDocument</span><span class="o">&lt;</span><span class="mi">200</span><span class="o">&gt;</span> <span class="n">doc</span><span class="p">;</span>
+  <span class="n">doc</span><span class="p">[</span><span class="s">"dado"</span><span class="p">]</span> <span class="o">=</span> <span class="n">analogRead</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="n">jsonBuffer</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+  <span class="n">serializeJson</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">jsonBuffer</span><span class="p">);</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">TOPIC</span><span class="p">,</span> <span class="n">jsonBuffer</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Por fim a função loop irá chamar a <code class="language-plaintext highlighter-rouge">publicaMensagem</code> acada 1s:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">publicaMensagem</span><span class="p">();</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">loop</span><span class="p">();</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><em>Código completo:</em></p>
+
+<blockquote>
+  <p>constantes.h</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#import &lt;pgmspace.h&gt;
+</span>
+<span class="c1">// Informações da Conexão</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">ENDPOINT</span><span class="p">[]</span>   <span class="o">=</span> <span class="s">"&lt;seu endpoint&gt;.amazonaws.com"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">CLIENT_ID</span><span class="p">[]</span>  <span class="o">=</span> <span class="s">"meu_dispositivo_iot"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">TOPIC</span><span class="p">[]</span>      <span class="o">=</span> <span class="s">"esp32/meu_dispositivo_iot/dados"</span><span class="p">;</span>
+
+<span class="c1">//Configurações do WiFi</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">WIFI_SSID</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Meu SSID"</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">WIFI_PASSWORD</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"Minha Senha"</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">ROOT</span><span class="p">[]</span> <span class="n">PROGMEM</span> <span class="o">=</span> <span class="s">R"EOF(
+-----BEGIN CERTIFICATE-----
+Conteúdo do Root
+-----END CERTIFICATE-----
+)EOF"</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">CERTIFICADO</span><span class="p">[]</span> <span class="n">PROGMEM</span> <span class="o">=</span> <span class="s">R"KEY(
+-----BEGIN CERTIFICATE-----
+Conteúdo do certificado
+-----END CERTIFICATE-----
+)KEY"</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">CHAVE_PRIVADA</span><span class="p">[]</span> <span class="n">PROGMEM</span> <span class="o">=</span> <span class="s">R"KEY(
+-----BEGIN RSA PRIVATE KEY-----
+Conteudo da chave privada
+-----END RSA PRIVATE KEY-----
+)KEY"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>sketch.ino</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"constantes.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;WiFiClientSecure.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;MQTTClient.h&gt;</span><span class="c1"> </span><span class="cp">
+#include</span> <span class="cpf">&lt;ArduinoJson.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;WiFi.h&gt;</span><span class="cp">
+</span>
+
+<span class="n">WiFiClientSecure</span> <span class="n">net</span> <span class="o">=</span> <span class="n">WiFiClientSecure</span><span class="p">();</span>
+<span class="n">MQTTClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">MQTTClient</span><span class="p">();</span>
+
+
+<span class="kt">void</span> <span class="nf">ConectaWiFi</span><span class="p">(){</span>
+  <span class="n">WiFi</span><span class="p">.</span><span class="n">mode</span><span class="p">(</span><span class="n">WIFI_STA</span><span class="p">);</span>
+  <span class="n">WiFi</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">WIFI_SSID</span><span class="p">,</span> <span class="n">WIFI_PASSWORD</span><span class="p">);</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Conectando ao WiFi..."</span><span class="p">);</span>
+
+  <span class="k">while</span><span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">status</span><span class="p">()</span> <span class="o">!=</span> <span class="n">WL_CONNECTED</span><span class="p">){</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ConfiguraCertificados</span><span class="p">(){</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setCACert</span><span class="p">(</span><span class="n">ROOT</span><span class="p">);</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setCertificate</span><span class="p">(</span><span class="n">CERTIFICADO</span><span class="p">);</span>
+  <span class="n">net</span><span class="p">.</span><span class="n">setPrivateKey</span><span class="p">(</span><span class="n">CHAVE_PRIVADA</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">ConfiguraMQTT</span><span class="p">(){</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">ENDPOINT</span><span class="p">,</span> <span class="mi">8883</span><span class="p">,</span> <span class="n">net</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Conectando ao AWS IoT"</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">CLIENT_ID</span><span class="p">)){</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">client</span><span class="p">.</span><span class="n">connected</span><span class="p">()){</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"AWS IoT Timeout!"</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"AWS IoT Connectada!"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">publicaMensagem</span><span class="p">(){</span>
+  <span class="n">StaticJsonDocument</span><span class="o">&lt;</span><span class="mi">200</span><span class="o">&gt;</span> <span class="n">doc</span><span class="p">;</span>
+  <span class="n">doc</span><span class="p">[</span><span class="s">"dado"</span><span class="p">]</span> <span class="o">=</span> <span class="n">analogRead</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="n">jsonBuffer</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+  <span class="n">serializeJson</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">jsonBuffer</span><span class="p">);</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">TOPIC</span><span class="p">,</span> <span class="n">jsonBuffer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="n">ConectaWiFi</span><span class="p">();</span>
+  <span class="n">ConfiguraCertificados</span><span class="p">();</span>
+  <span class="n">ConfiguraMQTT</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">publicaMensagem</span><span class="p">();</span>
+  <span class="n">client</span><span class="p">.</span><span class="n">loop</span><span class="p">();</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 <center><span style="font-size:3em; text-align:center"> WIP</span></center>
 
 
